@@ -1,0 +1,11 @@
+SELECT ?media ?mediaLabel ?place ?placeLabel WHERE {
+  ?media wdt:P840 ?place.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  SERVICE wikibase:around {
+    ?place wdt:P625 ?location.
+    bd:serviceParam wikibase:center "Point(15.72152 57.55022)"^^geo:wktLiteral;
+      wikibase:radius "10".
+  }
+  BIND(geof:distance("Point(15.72152 57.55022)"^^geo:wktLiteral, ?location) AS ?dist)
+}
+ORDER BY (?dist)
