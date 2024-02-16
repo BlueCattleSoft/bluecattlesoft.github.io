@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Video Converter</title>
+    <style>
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <input type="number" id="durationInput" placeholder="Duration in seconds">
+    <button id="convertBtn">Convert to Video</button>
+    <video controls autoplay id="videoOutput"></video>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            var fileInput = document.getElementById('fileInput');
+            var durationInput = document.getElementById('durationInput').value;
+            var videoOutput = document.getElementById('videoOutput');
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+
+            if (!fileInput.files.length || !durationInput) {
+                alert('Please select an image file and enter the duration.');
+                return;
+            }
+
+            var file = fileInput.files[0];
+            var videoDuration = parseInt(durationInput);
+            var img = new Image();
+
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                var frames = [];
+                var frameCount = videoDuration * 30; // 30 frames per second
+
+                for (var i = 0; i < frameCount; i++) {
+                    frames.push(canvas.toDataURL('image/jpeg', 1.0));
+                }
+
+                var blob = new Blob(frames, { type: 'image/jpeg' });
+                var url = URL.createObjectURL(blob);
+
+                videoOutput.src = url;
+            };
+
+            img.src = URL.createObjectURL(file);
+        });
+    </script>
+</body>
+</html>
