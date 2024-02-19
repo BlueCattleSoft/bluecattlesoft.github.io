@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimal Order Quantity Calculator</title>
+</head>
+<body>
+
+    <h1>Optimal Order Quantity Calculator</h1>
+
+    <form id="orderForm">
+        <label for="demand">Demand per Year:</label>
+        <input type="number" id="demand" required>
+
+        <label for="orderCost">Ordering Cost per Order:</label>
+        <input type="number" id="orderCost" required>
+
+        <label for="holdingCost">Holding Cost per Unit per Year:</label>
+        <input type="number" id="holdingCost" required>
+
+        <button type="button" onclick="calculateOptimalOrder()">Calculate</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        function calculateOptimalOrder() {
+            // Get form input values
+            const demand = parseFloat(document.getElementById('demand').value);
+            const orderCost = parseFloat(document.getElementById('orderCost').value);
+            const holdingCost = parseFloat(document.getElementById('holdingCost').value);
+
+            // Check if the input values are valid
+            if (isNaN(demand) || isNaN(orderCost) || isNaN(holdingCost)) {
+                alert('Please enter valid numerical values.');
+                return;
+            }
+
+            // Calculate the optimal order quantity
+            const optimalOrderQuantity = Math.ceil(Math.sqrt((2 * demand * orderCost) / holdingCost));
+
+            // Calculate the number of orders
+            const numberOfOrders = Math.ceil(demand / optimalOrderQuantity);
+
+            // Display the result
+            document.getElementById('result').innerHTML = `
+                The optimal order quantity is: ${optimalOrderQuantity}<br>
+                The number of orders is: ${numberOfOrders}
+            `;
+        }
+    </script>
+
+</body>
+</html>
